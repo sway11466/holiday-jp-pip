@@ -12,7 +12,7 @@
 
 ## 自動化
 
-- [ ] GitHub Actions: pytest 自動実行（push トリガー）
+- [x] GitHub Actions: pytest 自動実行（push / PR トリガー） → `.github/workflows/test.yml`
 - [ ] GitHub Actions: PyPI publish ワークフロー（tag トリガー）
 - [ ] GitHub Actions: 内閣府 CSV を取得・UTF-8 変換してバンドルを更新（doc/architecture.md「祝日 CSV を UTF-8 変換する」ADR の将来構想）
 

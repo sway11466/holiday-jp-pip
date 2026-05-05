@@ -1,5 +1,10 @@
 # holiday-jp-pip
 
+[![PyPI](https://img.shields.io/pypi/v/holiday-jp-pip.svg)](https://pypi.org/project/holiday-jp-pip/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/holiday-jp-pip.svg)](https://pypi.org/project/holiday-jp-pip/)
+[![test](https://github.com/sway11466/holiday-jp-pip/actions/workflows/test.yml/badge.svg)](https://github.com/sway11466/holiday-jp-pip/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 内閣府ホームページの[「国民の祝日」について](https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html)に基づいて平日や祝日を判定する Python ライブラリです。
 独自の祝日を追加することも可能です。
 

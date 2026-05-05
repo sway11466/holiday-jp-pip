@@ -26,7 +26,8 @@ Windows のコンソールで日本語を含むテスト出力を見る場合は
 
 ### 自動テスト
 
-GitHub Actions で push トリガーの pytest 実行を予定（未実装、[backlog](backlog.md) 参照）。
+GitHub Actions の [`test`](../.github/workflows/test.yml) ワークフローが `main` ブランチへの push と PR で起動する。
+ubuntu / windows / macos × Python 3.10 / 3.11 / 3.12 / 3.13 のマトリクスで pytest を実行する。
 
 ## ビルド
 
