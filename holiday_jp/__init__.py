@@ -136,6 +136,25 @@ class HolidayJP:
             for h in self._holidays.get(c["year"], [])
         )
 
+    def is_weekend(self, cond: _date | datetime | dict) -> bool:
+        """指定日が週末（``settings.weekend`` の曜日）か返す。
+
+        曜日番号は :py:meth:`datetime.date.weekday` に従い 0=月曜, 6=日曜。
+        ``unsupported_date_behavior='ignore'`` の場合はサポート外でも例外を出さず、
+        カレンダー上の曜日に基づいて判定する。
+        """
+        c = self._to_condition(cond)
+        if not self._is_valid_condition(c):
+            raise InvalidDateError(f"invalid date: {c}")
+        if not self.is_support_date(c) and self._settings.unsupported_date_behavior != "ignore":
+            raise UnsupportedDateError(f"not supported date: {c}")
+        weekday = _date(c["year"], c["month"], c["date"]).weekday()
+        return weekday in self._settings.weekend
+
+    def is_weekday(self, cond: _date | datetime | dict) -> bool:
+        """指定日が平日（週末でも祝日でもない日）か返す。"""
+        return not self.is_weekend(cond) and not self.is_holiday(cond)
+
     def _to_condition(self, cond: _date | datetime | dict) -> dict:
         """入力を ``{year?, month?, date?, name?}`` の dict に正規化する。"""
         if isinstance(cond, datetime):
