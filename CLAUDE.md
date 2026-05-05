@@ -76,6 +76,8 @@ Windows コンソールで日本語を出力する際は `PYTHONIOENCODING=utf-8
 | 月 | 0-indexed (`new Date(2021, 5-1, 3)`) | 1-indexed (`date(2021, 5, 3)`) | `Holiday.month` は 1-indexed で揃える（JS 版データクラスも 1-indexed） |
 | 日付型 | `Date`（時刻含む） | `datetime.date` | 時刻情報を持たないため `timezone_effect` の挙動を Python 用に再設計 |
 | 真偽値 | `true` / `false` | `True` / `False` | エラー文言を訳す際の些細な差異 |
+| `local_date` | 実行環境 TZ の `Date` | 常に JST の `date` | Python は TZ 非対応 `date` のため JST 日付に統一（[ADR](doc/architecture.md#local_date-は-jst-日付に統一する) 参照） |
+| JST 表現 | — | `timezone(timedelta(hours=9))` | `zoneinfo` は Windows で `tzdata` 依存になるため不採用 |
 
 ## 重要な設計判断（要約）
 
