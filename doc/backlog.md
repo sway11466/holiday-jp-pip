@@ -13,7 +13,7 @@
 ## 自動化
 
 - [x] GitHub Actions: pytest 自動実行（push / PR トリガー） → `.github/workflows/test.yml`
-- [ ] GitHub Actions: アクションを Node.js 24 対応版にアップデート（2026-06-02 デフォルト切替まで対応）
+- [x] GitHub Actions: アクションを Node.js 24 対応版にアップデート（actions/checkout@v6, astral-sh/setup-uv@v8.1.0）
 - [ ] GitHub Actions: PyPI publish ワークフロー（tag トリガー）
 - [ ] GitHub Actions: 内閣府 CSV を取得・UTF-8 変換してバンドルを更新（doc/architecture.md「祝日 CSV を UTF-8 変換する」ADR の将来構想）
 
