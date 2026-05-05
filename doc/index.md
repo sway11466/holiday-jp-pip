@@ -9,6 +9,9 @@
 ## [設定](setting.md)
    - 挙動を制御する設定を説明する
 
+## [初回セットアップ](setup.md)
+   - リポジトリ・PyPI・GitHub Environments の一度だけの設定手順
+
 ## [CICD](cicd.md)
    - 開発手順・テスト・PyPI 公開を説明する
 
