@@ -87,38 +87,54 @@ uv pip install --index-url https://test.pypi.org/simple/ holiday-jp-pip
 
 ### 自動公開
 
-`v*` タグをプッシュすると、[`.github/workflows/publish.yml`](../.github/workflows/publish.yml) が以下を順に実行する：
+公開には **Trusted Publishing（OIDC）** を使用し、長期 API トークンを保持しない。
+PyPI / TestPyPI それぞれで Publisher 登録が必要（一度だけ、後述）。
+
+#### TestPyPI ドライラン: [`.github/workflows/test-publish.yml`](../.github/workflows/test-publish.yml)
+
+手動実行（`workflow_dispatch`）で TestPyPI に公開する。本番リリース前の動作確認用。
+
+GitHub の Actions タブから `test-publish` を選び "Run workflow" をクリック。
+
+```
+pytest → uv build → uv publish --publish-url https://test.pypi.org/legacy/
+```
+
+#### 本番公開: [`.github/workflows/publish.yml`](../.github/workflows/publish.yml)
+
+`v*` タグのプッシュをトリガーに以下を順に実行：
 
 1. `pytest`（公開前の最終確認）
 2. `uv build`（sdist + wheel）
 3. `uv publish --trusted-publishing always`（PyPI へ公開）
-4. GitHub Release を自動作成（タグ名、自動生成リリースノート、dist/ 添付）
-
-公開は **PyPI Trusted Publishing（OIDC）** を使用し、API トークンは不要。
+4. GitHub Release を自動作成（自動生成リリースノート、dist/ 添付）
 
 #### Trusted Publishing 初期設定（一度だけ）
 
-1. https://pypi.org/manage/project/holiday-jp-pip/settings/publishing/ を開く
-2. "Add a new pending publisher" で以下を登録：
-   - PyPI Project Name: `holiday-jp-pip`
-   - Owner: `sway11466`
-   - Repository name: `holiday-jp-pip`
-   - Workflow name: `publish.yml`
-   - Environment name: `pypi`
-3. GitHub のリポジトリ設定で `pypi` 環境を作成（Settings ＞ Environments ＞ New environment）
-   - 任意で「Required reviewers」を追加してリリース時の承認ゲートを入れられる
+**TestPyPI 側**:
+1. https://test.pypi.org/manage/project/holiday-jp-pip/settings/publishing/
+2. Owner: `sway11466` / Repository: `holiday-jp-pip` / Workflow: `test-publish.yml` / Environment: `testpypi`
+
+**PyPI 側**:
+1. https://pypi.org/manage/project/holiday-jp-pip/settings/publishing/
+2. Owner: `sway11466` / Repository: `holiday-jp-pip` / Workflow: `publish.yml` / Environment: `pypi`
+
+**GitHub 側**:
+- Settings ＞ Environments で `testpypi` と `pypi` を作成
+- 任意で `pypi` の方には Required reviewers を設定して承認ゲートにする
 
 #### リリース手順
 
 ```bash
-# 1. version をバンプ（pyproject.toml と holiday_jp/__init__.py の __version__）
+# 1. pyproject.toml と holiday_jp/__init__.py の __version__ をバンプ
 # 2. コミット & push
-# 3. タグを切ってプッシュ
+# 3. （任意）GitHub Actions UI から test-publish を実行 → TestPyPI で動作確認
+# 4. タグを切ってプッシュ
 git tag v0.2.0
 git push origin v0.2.0
 ```
 
-→ あとはワークフローが PyPI 公開と GitHub Release 作成を自動で行う。
+→ ワークフローが PyPI 公開と GitHub Release 作成を自動で行う。
 
 ## 祝日 CSV の更新
 
