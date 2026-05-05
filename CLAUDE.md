@@ -32,20 +32,32 @@ pyproject.toml          # PyPI 公開設定
 
 ## 開発コマンド
 
-> Python 環境管理ツール（venv / uv / poetry）は未確定。決まり次第ここを更新する。
+Python 環境管理は **uv** を使う。`.venv/` は `uv sync` で自動作成される。
 
 ```bash
+# 初回セットアップ（venv 作成 + 依存インストール）
+uv sync
+
 # テスト
-pytest
-pytest --cov=holiday_jp
+uv run pytest
+uv run pytest --cov=holiday_jp
+
+# 任意の Python スクリプトを実行
+uv run python <script.py>
+
+# 依存追加
+uv add <package>                # 本体依存（このプロジェクトでは原則使わない＝依存ゼロ原則）
+uv add --dev <package>          # 開発依存（pytest 等）
 
 # ビルド
-python -m build
+uv build
 
 # TestPyPI / PyPI 公開
-twine upload --repository testpypi dist/*
-twine upload dist/*
+uv publish --publish-url https://test.pypi.org/legacy/
+uv publish
 ```
+
+Windows コンソールで日本語を出力する際は `PYTHONIOENCODING=utf-8` を付けると文字化けしない。
 
 ## コーディング規約
 
