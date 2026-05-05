@@ -1,10 +1,12 @@
 """バンドルされた祝日 CSV を読み込むモジュール（パッケージ内部用）。"""
 
-from datetime import date
+from datetime import datetime, timedelta, timezone
 from importlib import resources
 
 from holiday_jp.holiday import Holiday
 
+# JST は 1951 年以降 DST 不採用のため固定オフセットで扱う（doc/architecture.md 参照）。
+_JST = timezone(timedelta(hours=9), name="JST")
 _CSV_FILENAME = "syukujitsu.csv"
 
 
@@ -31,7 +33,7 @@ def load_holidays() -> dict[int, list[Holiday]]:
                 month=month,
                 date=day,
                 name=name,
-                local_date=date(year, month, day),
+                local_date=datetime(year, month, day, tzinfo=_JST),
             )
         )
     return holidays

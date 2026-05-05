@@ -1,6 +1,8 @@
 """バンドル CSV ローダーのテスト。"""
 
-from holiday_jp import Holiday
+from datetime import datetime
+
+from holiday_jp import JST, Holiday
 from holiday_jp._loader import load_holidays
 
 
@@ -50,3 +52,12 @@ def test_each_year_list_is_sorted_by_date() -> None:
     for year, holidays in data.items():
         keys = [(h.month, h.date) for h in holidays]
         assert keys == sorted(keys), f"year {year} is not sorted: {keys}"
+
+
+def test_local_date_is_jst_aware_datetime() -> None:
+    """local_date は JST tzinfo 付き datetime で year/month/day と一致する。"""
+    data = load_holidays()
+    first = data[1955][0]  # 1955/1/1 元日
+    assert isinstance(first.local_date, datetime)
+    assert first.local_date == datetime(1955, 1, 1, 0, 0, tzinfo=JST)
+    assert first.local_date.tzinfo is not None

@@ -1,7 +1,7 @@
 """Holiday: 祝日 1 件を表す不変データクラス。"""
 
 from dataclasses import dataclass
-from datetime import date as _date
+from datetime import datetime
 
 
 @dataclass(frozen=True)
@@ -13,13 +13,13 @@ class Holiday:
         month:      祝日の月（1〜12）
         date:       祝日の日（1〜31）
         name:       祝日名（日本語）
-        local_date: JST 日付を ``datetime.date`` で表したもの。常に year/month/date と一致する。
-                    JS 版は実行環境タイムゾーンの日付を保持していたが、Python の ``date``
-                    はタイムゾーン非対応のため JST 日付に統一した（doc/architecture.md 参照）。
+        local_date: JST 0:00 という「瞬間」を表す TZ 付き ``datetime``。
+                    実行環境の TZ で再解釈するには ``local_date.astimezone()`` を呼ぶ。
+                    例: ハワイ環境で ``local_date.astimezone().date()`` は前日（5/2）を返す。
     """
 
     year: int
     month: int
     date: int
     name: str
-    local_date: _date
+    local_date: datetime

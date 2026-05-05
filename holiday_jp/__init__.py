@@ -8,18 +8,21 @@ from holiday_jp._loader import load_holidays
 from holiday_jp.holiday import Holiday
 from holiday_jp.settings import Settings, UnsupportedDateBehavior
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = [
     "Holiday",
     "HolidayJP",
     "InvalidDateError",
+    "JST",
     "Settings",
     "UnsupportedDateError",
     "__version__",
 ]
 
 # JST は 1951 年以降 DST 不採用のため固定オフセットで扱う（doc/architecture.md 参照）。
-_JST = timezone(timedelta(hours=9), name="JST")
+# Holiday.local_date 構築時などで利用者にも公開する。
+JST = timezone(timedelta(hours=9), name="JST")
+_JST = JST  # 後方参照用エイリアス
 
 _BASE_HOLIDAYS: dict[int, list[Holiday]] = load_holidays()
 
@@ -41,12 +44,13 @@ class HolidayJP:
     """祝日判定インスタンス。
 
     Examples:
-        >>> from holiday_jp import HolidayJP
-        >>> from datetime import date
+        >>> from datetime import date, datetime
+        >>> from holiday_jp import HolidayJP, Holiday, JST
         >>> hp = HolidayJP()
         >>> hp.is_holiday(date(2021, 5, 3))
         True
-        >>> custom = Holiday(year=2099, month=1, date=1, name='custom', local_date=date(2099, 1, 1))
+        >>> custom = Holiday(year=2099, month=1, date=1, name='custom',
+        ...                  local_date=datetime(2099, 1, 1, tzinfo=JST))
         >>> hp = HolidayJP(extends=[custom])
     """
 

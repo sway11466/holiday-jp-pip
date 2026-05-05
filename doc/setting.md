@@ -74,11 +74,11 @@ holidayjp = HolidayJP(
 - 使用例
 
     ```python
-    from datetime import date
-    from holiday_jp import HolidayJP, Holiday
+    from datetime import date, datetime
+    from holiday_jp import HolidayJP, Holiday, JST
 
     custom = [Holiday(year=2099, month=12, date=31, name="社内記念日",
-                       local_date=date(2099, 12, 31))]
+                       local_date=datetime(2099, 12, 31, tzinfo=JST))]
     holidayjp = HolidayJP(extends=custom)
     holidayjp.is_holiday(date(2099, 12, 31))  # True
     ```

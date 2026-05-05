@@ -1,8 +1,8 @@
 """Settings データクラスの基本動作テスト。"""
 
-from datetime import date
+from datetime import date, datetime
 
-from holiday_jp import Holiday, Settings
+from holiday_jp import Holiday, JST, Settings
 
 
 def test_default_values() -> None:
@@ -14,7 +14,7 @@ def test_default_values() -> None:
 
 
 def test_override_values() -> None:
-    extras = [Holiday(year=2024, month=1, date=2, name="custom", local_date=date(2024, 1, 2))]
+    extras = [Holiday(year=2024, month=1, date=2, name="custom", local_date=datetime(2024, 1, 2, tzinfo=JST))]
     s = Settings(
         timezone_effect=False,
         unsupported_date_behavior="ignore",
@@ -33,7 +33,7 @@ def test_default_factory_does_not_share_state() -> None:
     s2 = Settings()
     s1.weekend.append(0)
     s1.extends.append(
-        Holiday(year=2024, month=1, date=2, name="custom", local_date=date(2024, 1, 2))
+        Holiday(year=2024, month=1, date=2, name="custom", local_date=datetime(2024, 1, 2, tzinfo=JST))
     )
     assert s2.weekend == [5, 6]
     assert s2.extends == []

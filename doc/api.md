@@ -145,7 +145,7 @@ holidayjp.get({"year": 2021, "month": 5})        # dict も可
 | `month` | `int` | 月（1〜12） |
 | `date` | `int` | 日（1〜31） |
 | `name` | `str` | 祝日名（日本語） |
-| `local_date` | `datetime.date` | JST 日付を表す `date`。常に `year/month/date` と一致する |
+| `local_date` | `datetime.datetime` | JST 0:00 という瞬間を表す `datetime`（`tzinfo=JST` 付き）。実行環境の TZ で再解釈するには `local_date.astimezone()` を呼ぶ |
 
 ### Settings
 
