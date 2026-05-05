@@ -72,10 +72,30 @@ def test_invalid_calendar_date_returns_empty() -> None:
     assert holidayjp.get({"year": 2001, "month": 1, "date": 32}) == []
 
 
+def test_no_match_by_dict_returns_empty() -> None:
+    """有効な日付だが祝日でない場合も空配列。"""
+    holidayjp = HolidayJP()
+    assert holidayjp.get({"year": 2021, "month": 5, "date": 10}) == []
+
+
 def test_unsupported_year_raises_by_default() -> None:
     holidayjp = HolidayJP()
     with pytest.raises(UnsupportedDateError):
         holidayjp.get({"year": 1954, "month": 1, "date": 1})
+
+
+def test_unsupported_older_by_date_raises() -> None:
+    """date 型の過去年でも raises。"""
+    holidayjp = HolidayJP()
+    with pytest.raises(UnsupportedDateError):
+        holidayjp.get(date(1954, 1, 1))
+
+
+def test_unsupported_future_by_date_raises() -> None:
+    """date 型の未来年でも raises。"""
+    holidayjp = HolidayJP()
+    with pytest.raises(UnsupportedDateError):
+        holidayjp.get(date(2099, 1, 1))
 
 
 def test_unsupported_year_returns_empty_with_ignore() -> None:
@@ -116,3 +136,12 @@ def test_datetime_with_timezone_effect_false_uses_raw_ymd() -> None:
     holidays = holidayjp.get(dt)
     # raw ymd は 5/2 なので一致しない（5/2 は祝日でない）
     assert holidays == []
+
+
+def test_datetime_with_timezone_effect_false_on_jst_input() -> None:
+    """timezone_effect=False + JST tzinfo: year/month/day をそのまま使う。"""
+    holidayjp = HolidayJP(timezone_effect=False)
+    dt = datetime(2021, 5, 3, 15, 0, tzinfo=JST)
+    holidays = holidayjp.get(dt)
+    assert len(holidays) == 1
+    assert holidays[0].name == "憲法記念日"

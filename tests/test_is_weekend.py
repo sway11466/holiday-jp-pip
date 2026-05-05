@@ -53,13 +53,22 @@ def test_newer_year_raises() -> None:
         holidayjp.is_weekend({"year": 2099, "month": 1, "date": 1})
 
 
-def test_unsupported_year_with_ignore_uses_calendar() -> None:
-    """ignore モード: サポート外でもカレンダー上の曜日で判定する。"""
+def test_unsupported_year_older_with_ignore_uses_calendar() -> None:
+    """ignore モード: サポート外（過去）でもカレンダー上の曜日で判定する。"""
     holidayjp = HolidayJP(unsupported_date_behavior="ignore")
     # 1954/1/1 は金曜 → 週末でない
     assert holidayjp.is_weekend({"year": 1954, "month": 1, "date": 1}) is False
     # 1954/1/2 は土曜 → 週末
     assert holidayjp.is_weekend({"year": 1954, "month": 1, "date": 2}) is True
+
+
+def test_unsupported_year_future_with_ignore_uses_calendar() -> None:
+    """ignore モード: サポート外（未来）でもカレンダー上の曜日で判定する。"""
+    holidayjp = HolidayJP(unsupported_date_behavior="ignore")
+    # 2099/1/1 は木曜 → 週末でない
+    assert holidayjp.is_weekend({"year": 2099, "month": 1, "date": 1}) is False
+    # 2099/1/3 は土曜 → 週末
+    assert holidayjp.is_weekend({"year": 2099, "month": 1, "date": 3}) is True
 
 
 def test_datetime_jst_saturday() -> None:

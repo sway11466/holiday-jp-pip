@@ -72,11 +72,18 @@ def test_datetime_utc_converts_to_jst_next_day() -> None:
     assert holidayjp.is_holiday(dt) is False
 
 
-def test_timezone_effect_false_uses_raw_ymd() -> None:
-    """timezone_effect=False では tzinfo を無視して year/month/day をそのまま使う。"""
+def test_timezone_effect_false_uses_raw_ymd_on_utc_input() -> None:
+    """timezone_effect=False + UTC tzinfo: tzinfo を無視して year/month/day をそのまま使う。"""
     holidayjp = HolidayJP(timezone_effect=False)
     dt = datetime(2021, 2, 11, 15, 0, tzinfo=timezone.utc)
     # raw ymd は 2/11 で建国記念日として True
+    assert holidayjp.is_holiday(dt) is True
+
+
+def test_timezone_effect_false_uses_raw_ymd_on_jst_input() -> None:
+    """timezone_effect=False + JST tzinfo: 結果は変わらず year/month/day をそのまま使う。"""
+    holidayjp = HolidayJP(timezone_effect=False)
+    dt = datetime(2021, 2, 11, 15, 0, tzinfo=JST)
     assert holidayjp.is_holiday(dt) is True
 
 
