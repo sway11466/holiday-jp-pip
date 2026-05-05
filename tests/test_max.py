@@ -1,16 +1,16 @@
 """HolidayJP.max() のテスト。"""
 
-from holiday_jp import use_holiday_jp
+from holiday_jp import HolidayJP
 
 
 def test_basic_call() -> None:
-    holidayjp = use_holiday_jp()
+    holidayjp = HolidayJP()
     holidayjp.max()
 
 
 def test_max_is_2027_labor_thanksgiving() -> None:
     """バンドル CSV の最終レコードは 2027/11/23 勤労感謝の日。"""
-    holidayjp = use_holiday_jp()
+    holidayjp = HolidayJP()
     holiday = holidayjp.max()
     assert holiday.year == 2027
     assert holiday.month == 11

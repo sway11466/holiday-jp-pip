@@ -32,8 +32,8 @@ pip install holiday-jp-pip
 - 初期化
 
     ```python
-    from holiday_jp import use_holiday_jp
-    holidayjp = use_holiday_jp()
+    from holiday_jp import HolidayJP
+    holidayjp = HolidayJP()
     ```
 
 - 指定日が祝日であるか判定する
@@ -72,10 +72,10 @@ pip install holiday-jp-pip
 
     ```python
     from datetime import date
-    from holiday_jp import use_holiday_jp, Holiday
+    from holiday_jp import HolidayJP, Holiday
 
     additional = [Holiday(year=2023, month=3, date=10, name="test", local_date=date(2023, 3, 10))]
-    holidayjp = use_holiday_jp(extends=additional)
+    holidayjp = HolidayJP(extends=additional)
     ret = holidayjp.is_holiday(date(2023, 3, 10))
     print(ret)  # True
     ```

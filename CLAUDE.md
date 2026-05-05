@@ -21,7 +21,7 @@
 
 ```
 holiday_jp/             # パッケージ本体
-  __init__.py           # ファクトリ関数 use_holiday_jp() / HolidayJP クラス
+  __init__.py           # 公開 API（HolidayJP クラス、例外）
   holiday.py            # Holiday データクラス
   settings.py           # Settings 設定クラス
   syukujitsu.csv        # バンドル CSV（UTF-8 化済み）
@@ -83,7 +83,7 @@ Windows コンソールで日本語を出力する際は `PYTHONIOENCODING=utf-8
 
 - **CSV 腹持ち + UTF-8 バンドル**: 内閣府 CSV は Shift_JIS だが UTF-8 化したものをバンドルする。詳細は [doc/architecture.md](doc/architecture.md)
 - **依存ゼロ**: 趣味プロジェクト + 軽量化のため。詳細同上
-- **scope='global'**: モジュールレベルのシングルトンで共有設定を保持。`'local'` で独立インスタンス
+- **シングルトン非採用**: `HolidayJP()` は毎回独立した新規インスタンスを返す。グローバル共有は意図的に提供しない（ADR 参照）
 
 ## やってはいけないこと
 

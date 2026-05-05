@@ -6,7 +6,6 @@ from typing import Literal
 from holiday_jp.holiday import Holiday
 
 UnsupportedDateBehavior = Literal["error", "ignore"]
-SettingScope = Literal["global", "local"]
 
 
 @dataclass

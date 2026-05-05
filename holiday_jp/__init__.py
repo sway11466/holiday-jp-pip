@@ -6,7 +6,7 @@ from typing import Iterable
 
 from holiday_jp._loader import load_holidays
 from holiday_jp.holiday import Holiday
-from holiday_jp.settings import Settings, SettingScope, UnsupportedDateBehavior
+from holiday_jp.settings import Settings, UnsupportedDateBehavior
 
 __version__ = "0.1.0"
 __all__ = [
@@ -15,12 +15,18 @@ __all__ = [
     "InvalidDateError",
     "Settings",
     "UnsupportedDateError",
-    "use_holiday_jp",
     "__version__",
 ]
 
 # JST は 1951 年以降 DST 不採用のため固定オフセットで扱う（doc/architecture.md 参照）。
 _JST = timezone(timedelta(hours=9), name="JST")
+
+_BASE_HOLIDAYS: dict[int, list[Holiday]] = load_holidays()
+
+
+def _clone_base_holidays() -> dict[int, list[Holiday]]:
+    """ベースデータの浅いクローンを返す。Holiday は frozen のためオブジェクトは共有してよい。"""
+    return {year: list(holidays) for year, holidays in _BASE_HOLIDAYS.items()}
 
 
 class InvalidDateError(ValueError):
@@ -32,11 +38,35 @@ class UnsupportedDateError(ValueError):
 
 
 class HolidayJP:
-    """祝日判定インスタンス。通常は :func:`use_holiday_jp` 経由で取得する。"""
+    """祝日判定インスタンス。
 
-    def __init__(self, holidays: dict[int, list[Holiday]], settings: Settings) -> None:
-        self._holidays = holidays
-        self._settings = settings
+    Examples:
+        >>> from holiday_jp import HolidayJP
+        >>> from datetime import date
+        >>> hp = HolidayJP()
+        >>> hp.is_holiday(date(2021, 5, 3))
+        True
+        >>> custom = Holiday(year=2099, month=1, date=1, name='custom', local_date=date(2099, 1, 1))
+        >>> hp = HolidayJP(extends=[custom])
+    """
+
+    def __init__(
+        self,
+        *,
+        timezone_effect: bool = True,
+        unsupported_date_behavior: UnsupportedDateBehavior = "error",
+        weekend: Iterable[int] | None = None,
+        extends: Iterable[Holiday] | None = None,
+    ) -> None:
+        self._holidays = _clone_base_holidays()
+        self._settings = Settings(
+            timezone_effect=timezone_effect,
+            unsupported_date_behavior=unsupported_date_behavior,
+            weekend=list(weekend) if weekend is not None else [5, 6],
+            extends=list(extends) if extends is not None else [],
+        )
+        for h in self._settings.extends:
+            self._holidays.setdefault(h.year, []).append(h)
 
     def all(self) -> list[Holiday]:
         """全祝日を年・出現順（CSV 上の昇順）に並べたリストを返す。"""
@@ -176,53 +206,3 @@ class HolidayJP:
         except (ValueError, TypeError):
             return False
         return True
-
-
-_BASE_HOLIDAYS: dict[int, list[Holiday]] = load_holidays()
-_global_instance: HolidayJP | None = None
-
-
-def _clone_base_holidays() -> dict[int, list[Holiday]]:
-    """ベースデータの浅いクローンを返す。Holiday は frozen のためオブジェクトは共有してよい。"""
-    return {year: list(holidays) for year, holidays in _BASE_HOLIDAYS.items()}
-
-
-def use_holiday_jp(
-    *,
-    timezone_effect: bool | None = None,
-    unsupported_date_behavior: UnsupportedDateBehavior | None = None,
-    weekend: Iterable[int] | None = None,
-    extends: Iterable[Holiday] | None = None,
-    scope: SettingScope = "global",
-) -> HolidayJP:
-    """祝日判定インスタンスを返す。
-
-    ``scope='global'``（デフォルト）はモジュール内で共有されるシングルトンを返し、
-    指定された設定でグローバル状態を更新する。後続の呼び出しは設定が引き継がれる。
-    ``scope='local'`` は独立したインスタンスを生成し、他に影響しない。
-
-    None を渡したパラメータは反映されず、対応する設定は変更されない。
-    """
-
-    global _global_instance
-    if scope == "local":
-        instance = HolidayJP(_clone_base_holidays(), Settings())
-    else:
-        if _global_instance is None:
-            _global_instance = HolidayJP(_clone_base_holidays(), Settings())
-        instance = _global_instance
-
-    settings = instance._settings
-    if timezone_effect is not None:
-        settings.timezone_effect = timezone_effect
-    if unsupported_date_behavior is not None:
-        settings.unsupported_date_behavior = unsupported_date_behavior
-    if weekend is not None:
-        settings.weekend = list(weekend)
-    if extends is not None:
-        extra_list = list(extends)
-        settings.extends = extra_list
-        for h in extra_list:
-            instance._holidays.setdefault(h.year, []).append(h)
-
-    return instance
