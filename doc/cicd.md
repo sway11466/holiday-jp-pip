@@ -85,9 +85,40 @@ uv pip install --index-url https://test.pypi.org/simple/ holiday-jp-pip
    uv publish --token $PYPI_TOKEN
    ```
 
-### 自動公開（予定）
+### 自動公開
 
-tag のプッシュをトリガーに GitHub Actions で自動公開する予定（未実装、[backlog](backlog.md) 参照）。
+`v*` タグをプッシュすると、[`.github/workflows/publish.yml`](../.github/workflows/publish.yml) が以下を順に実行する：
+
+1. `pytest`（公開前の最終確認）
+2. `uv build`（sdist + wheel）
+3. `uv publish --trusted-publishing always`（PyPI へ公開）
+4. GitHub Release を自動作成（タグ名、自動生成リリースノート、dist/ 添付）
+
+公開は **PyPI Trusted Publishing（OIDC）** を使用し、API トークンは不要。
+
+#### Trusted Publishing 初期設定（一度だけ）
+
+1. https://pypi.org/manage/project/holiday-jp-pip/settings/publishing/ を開く
+2. "Add a new pending publisher" で以下を登録：
+   - PyPI Project Name: `holiday-jp-pip`
+   - Owner: `sway11466`
+   - Repository name: `holiday-jp-pip`
+   - Workflow name: `publish.yml`
+   - Environment name: `pypi`
+3. GitHub のリポジトリ設定で `pypi` 環境を作成（Settings ＞ Environments ＞ New environment）
+   - 任意で「Required reviewers」を追加してリリース時の承認ゲートを入れられる
+
+#### リリース手順
+
+```bash
+# 1. version をバンプ（pyproject.toml と holiday_jp/__init__.py の __version__）
+# 2. コミット & push
+# 3. タグを切ってプッシュ
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+→ あとはワークフローが PyPI 公開と GitHub Release 作成を自動で行う。
 
 ## 祝日 CSV の更新
 
