@@ -7,7 +7,6 @@ from holiday_jp.holiday import Holiday
 
 UnsupportedDateBehavior = Literal["error", "ignore"]
 SettingScope = Literal["global", "local"]
-Weekday = Literal[0, 1, 2, 3, 4, 5, 6]
 
 
 @dataclass
@@ -22,7 +21,7 @@ class Settings:
     timezone_effect: bool = True
     # サポート範囲外の年が指定されたときの挙動。
     unsupported_date_behavior: UnsupportedDateBehavior = "error"
-    # 週末として扱う曜日。デフォルトは土曜(5)・日曜(6)。
-    weekend: list[Weekday] = field(default_factory=lambda: [5, 6])
+    # 週末として扱う曜日。0(月)〜6(日) の値を入れる。デフォルトは土曜・日曜。
+    weekend: list[int] = field(default_factory=lambda: [5, 6])
     # 追加で祝日として扱うレコード。
     extends: list[Holiday] = field(default_factory=list)

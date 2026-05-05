@@ -54,7 +54,7 @@ pip install holiday-jp-pip
 - 指定した条件に当てはまる祝日を取得する（例 1）
 
     ```python
-    holidays = holidayjp.get({"year": 2021, "month": 5})
+    holidays = holidayjp.get(year=2021, month=5)
     print(len(holidays))           # 3
     print(holidays[0].name)        # 憲法記念日
     print(holidays[0].local_date)  # 2021-05-03 の date オブジェクト
@@ -63,7 +63,7 @@ pip install holiday-jp-pip
 - 指定した条件に当てはまる祝日を取得する（例 2）
 
     ```python
-    holidays = holidayjp.get({"year": 2021, "name": "スポーツの日"})
+    holidays = holidayjp.get(year=2021, name="スポーツの日")
     print(len(holidays))           # 1
     print(holidays[0].local_date)  # 2021-07-23 の date オブジェクト
     ```
@@ -75,8 +75,8 @@ pip install holiday-jp-pip
     from holiday_jp import use_holiday_jp, Holiday
 
     additional = [Holiday(year=2023, month=3, date=10, name="test", local_date=date(2023, 3, 10))]
-    holidayjp = use_holiday_jp({"extends": additional})
-    ret = holidayjp.is_holiday({"year": 2023, "month": 3, "date": 10})
+    holidayjp = use_holiday_jp(extends=additional)
+    ret = holidayjp.is_holiday(date(2023, 3, 10))
     print(ret)  # True
     ```
 
