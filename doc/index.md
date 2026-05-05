@@ -15,5 +15,8 @@
 ## [アーキテクチャー](architecture.md)
    - アーキテクチャーの決定記録（ADR）
 
+## [JS 版との差分](differences-from-js.md)
+   - 移植元 `holiday-jp-npm` との実差分・設計差・命名差のまとめ
+
 ## [Backlog](backlog.md)
    - 公開準備や周辺作業の TODO リスト

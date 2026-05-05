@@ -9,6 +9,7 @@
 独自の祝日を追加することも可能です。
 
 JS 版 [`@sway11466/holiday-jp-npm`](https://github.com/sway11466/holiday-jp-npm) の Python 移植版です。
+JS 版との詳しい差分は [doc/differences-from-js.md](doc/differences-from-js.md) を参照してください。
 
 - 判定ルール
 
