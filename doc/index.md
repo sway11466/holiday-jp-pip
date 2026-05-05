@@ -14,3 +14,6 @@
 
 ## [アーキテクチャー](architecture.md)
    - アーキテクチャーの決定記録（ADR）
+
+## [Backlog](backlog.md)
+   - 公開準備や周辺作業の TODO リスト

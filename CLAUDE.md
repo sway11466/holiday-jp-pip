@@ -10,11 +10,11 @@
 
 ## 関連ドキュメント
 
-- 引継ぎ・初期方針: [holiday-jp-pip-start.md](holiday-jp-pip-start.md)
 - 公開 API 仕様: [doc/api.md](doc/api.md)
 - 設定リファレンス: [doc/setting.md](doc/setting.md)
 - 設計判断（ADR）: [doc/architecture.md](doc/architecture.md)
 - テスト・公開手順: [doc/cicd.md](doc/cicd.md)
+- 残作業: [doc/backlog.md](doc/backlog.md)
 - 移植元 JS 実装: `../holiday-jp-npm/`
 
 ## ディレクトリ構成
