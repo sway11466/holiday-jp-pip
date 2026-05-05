@@ -9,18 +9,20 @@ requires-python = ">=3.10"
 authors = [
     { name = "Sway11466" },
 ]
-keywords = ["japan", "holiday", "calendar", "weekday", "weekend"]
+keywords = ["japan", "holiday", "jst", "calendar", "weekday", "weekend"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Topic :: Office/Business :: Scheduling",
     "Natural Language :: Japanese",
+    "Typing :: Typed",
 ]
 dependencies = []
 
@@ -28,6 +30,7 @@ dependencies = []
 Homepage = "https://github.com/sway11466/holiday-jp-pip"
 Repository = "https://github.com/sway11466/holiday-jp-pip"
 Issues = "https://github.com/sway11466/holiday-jp-pip/issues"
+Documentation = "https://github.com/sway11466/holiday-jp-pip/blob/main/doc/index.md"
 
 [build-system]
 requires = ["hatchling"]
