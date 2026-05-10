@@ -88,6 +88,17 @@ pip install holiday-jp-pip
     print(ret)  # True
     ```
 
+- 外部 CSV を使う
+
+    ```python
+    from holiday_jp import HolidayJP
+
+    # バンドル CSV の代わりに任意のファイルを使う
+    holidayjp = HolidayJP(csv_path="/path/to/syukujitsu.csv")
+    ```
+
+    `csv_path` を指定するとバンドル CSV は使われず、指定したファイルだけが祝日データとして読み込まれます（フォーマットは内閣府 CSV と同じ `YYYY/M/D,祝日名` 形式）。バンドル CSV と独自レコードをマージしたい場合は `extends` を使ってください。
+
 ## 説明
 
 - 1955 年〜2027 年に対応しています

@@ -1,6 +1,6 @@
 [project]
 name = "holiday-jp-pip"
-version = "0.2.0"
+version = "0.3.0"
 description = "Japanese holiday detection library based on Cabinet Office data, ported from holiday-jp-npm."
 readme = "README.md"
 license = "MIT"

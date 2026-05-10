@@ -1,5 +1,6 @@
 """holiday-jp-pip: 内閣府公式データに基づく日本の祝日判定ライブラリ。"""
 
+import os
 from copy import deepcopy
 from datetime import date as _date, datetime, timedelta, timezone
 from typing import Iterable
@@ -8,7 +9,7 @@ from holiday_jp._loader import load_holidays
 from holiday_jp.holiday import Holiday
 from holiday_jp.settings import Settings, UnsupportedDateBehavior
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __all__ = [
     "Holiday",
     "HolidayJP",
@@ -61,13 +62,18 @@ class HolidayJP:
         unsupported_date_behavior: UnsupportedDateBehavior = "error",
         weekend: Iterable[int] | None = None,
         extends: Iterable[Holiday] | None = None,
+        csv_path: str | os.PathLike | None = None,
     ) -> None:
-        self._holidays = _clone_base_holidays()
+        if csv_path is None:
+            self._holidays = _clone_base_holidays()
+        else:
+            self._holidays = load_holidays(csv_path)
         self._settings = Settings(
             timezone_effect=timezone_effect,
             unsupported_date_behavior=unsupported_date_behavior,
             weekend=list(weekend) if weekend is not None else [5, 6],
             extends=list(extends) if extends is not None else [],
+            csv_path=str(csv_path) if csv_path is not None else None,
         )
         for h in self._settings.extends:
             self._holidays.setdefault(h.year, []).append(h)

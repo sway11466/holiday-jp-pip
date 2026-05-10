@@ -11,6 +11,7 @@ holidayjp = HolidayJP(
     unsupported_date_behavior="error",
     weekend=[5, 6],
     extends=[],
+    csv_path=None,
 )
 ```
 
@@ -81,4 +82,30 @@ holidayjp = HolidayJP(
                        local_date=datetime(2099, 12, 31, tzinfo=JST))]
     holidayjp = HolidayJP(extends=custom)
     holidayjp.is_holiday(date(2099, 12, 31))  # True
+    ```
+
+## csv_path
+
+- 何の設定？
+    - 祝日 CSV を外部ファイルから読み込むためのパス
+- 型: `str | os.PathLike | None`
+- デフォルト値: `None`
+- 説明
+    - `None` の場合はパッケージにバンドルされた CSV を使用する（従来どおり）
+    - パスを指定した場合はそのファイルを UTF-8 として読み込み、**バンドル CSV は使用しない**
+    - CSV のフォーマットは内閣府公開 CSV と同じ `YYYY/M/D,祝日名` 形式（ヘッダー行や日付として解釈できない行はスキップされる）
+    - 同一パスを複数回指定した場合も毎回ファイルを読み込む（インスタンス化は稀である前提）
+    - チルダ `~` や環境変数の展開は行わない（呼び出し側で展開すること）
+    - ファイルが存在しない場合は `FileNotFoundError` が送出される
+    - バンドル CSV と外部 CSV をマージしたい場合は `extends` を併用する
+- 使用例
+
+    ```python
+    from holiday_jp import HolidayJP
+
+    # 外部 CSV を使う
+    holidayjp = HolidayJP(csv_path="/path/to/syukujitsu.csv")
+
+    # 外部 CSV + 追加レコード
+    holidayjp = HolidayJP(csv_path=path, extends=extra_holidays)
     ```
