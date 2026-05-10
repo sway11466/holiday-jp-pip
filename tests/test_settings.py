@@ -11,6 +11,7 @@ def test_default_values() -> None:
     assert s.unsupported_date_behavior == "error"
     assert s.weekend == [5, 6]
     assert s.extends == []
+    assert s.csv_path is None
 
 
 def test_override_values() -> None:
@@ -20,11 +21,13 @@ def test_override_values() -> None:
         unsupported_date_behavior="ignore",
         weekend=[6],
         extends=extras,
+        csv_path="/tmp/custom.csv",
     )
     assert s.timezone_effect is False
     assert s.unsupported_date_behavior == "ignore"
     assert s.weekend == [6]
     assert s.extends == extras
+    assert s.csv_path == "/tmp/custom.csv"
 
 
 def test_default_factory_does_not_share_state() -> None:

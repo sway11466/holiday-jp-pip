@@ -24,3 +24,5 @@ class Settings:
     weekend: list[int] = field(default_factory=lambda: [5, 6])
     # 追加で祝日として扱うレコード。
     extends: list[Holiday] = field(default_factory=list)
+    # 祝日 CSV のパス。None の場合はバンドル CSV を使用する。
+    csv_path: str | None = None

@@ -12,6 +12,7 @@ holidayjp = HolidayJP(
     unsupported_date_behavior="error",
     weekend=[5, 6],
     extends=[],
+    csv_path=None,
 )
 ```
 
