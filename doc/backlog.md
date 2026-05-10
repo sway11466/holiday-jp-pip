@@ -10,6 +10,7 @@
 ## 自動化
 
 - [ ] GitHub Actions: 内閣府 CSV を取得・UTF-8 変換してバンドルを更新（doc/architecture.md「祝日 CSV を UTF-8 変換する」ADR の将来構想）
+- [ ] `test-publish.yml` をタグ起動に変更し本番リリースと手順を揃える（例: `v*-rc*` / `test-v*` のような専用タグ push をトリガに TestPyPI へ公開。現状は `workflow_dispatch` で手動実行のため本番（`v*` タグ push）と手順が乖離している）
 
 ## 品質
 
